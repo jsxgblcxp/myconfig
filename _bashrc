@@ -1,0 +1,110 @@
+# User specific aliases and functions
+
+alias ls='ls --color'
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+alias cll='cls ;ll'
+alias cla='cls ;la'
+alias cl='cls ;l'
+alias lc='ll *.c'
+alias cx='cd ..'
+alias ins='sudo apt-get install'
+alias remove='sudo apt-get remove'
+alias cls='clear'
+alias uc='sudo shutdown -c'
+alias rs='source ~/.bashrc'
+alias bash_set='vim ~/.bashrc'
+alias mt='sudo mount -o umask=000'
+alias um='sudo umount'
+alias um_flash='um /mnt'
+alias ce='cd ~/gb_develop_space/easy/'
+alias r='./t.sh'
+alias rr='./t1.sh'
+alias cd..='cd ..'
+alias test='cd ~/gb_develop_space/easy/test/c_cpp/'
+alias mylib='cd ~/gb_develop_space/projects/mylib/'
+alias _ev='vim ~/.bashrc'
+alias _sv='source ~/.bashrc'
+alias lmews='cd ~/gb_develop_space/projects/LME_FIX_9_0/'
+alias qrws='cd ~/gb_develop_space/projects/QUOTE_REPLY_9_0/src'
+alias hkq='cd ~/gb_develop_space/projects/HKEx_Quote_9_0/'
+
+alias _mv='mv --backup'
+alias cb='cd -'
+alias st='cd ~/gb_develop_space/projects/c_cpp/' 
+alias cdpj='cd ~/gb_develop_space/projects/' 
+
+alias .gdb='gdb -x ~/gb_develop_space/.gdb_config '
+alias configgdb='vim ~/gb_develop_space/.gdb_config'
+alias svn?='svn st | grep "^?"'
+alias sst='svn st'
+alias svnrevert=' svn ci -m "just add soemthing I am to remove later" >> svn_ci_info '
+
+alias lg='tail ./GwQuote_ch01/EventOutput '
+alias lgm='tail -n 20  ./GwQuote_ch01/EventOutput '
+alias pps='ps aux | grep "debug"'
+
+alias tag='ctags -R .'
+
+
+#=======for tapmanagement
+alias tapreset='tapstop ; tapstart ; tapst'
+alias tapst='~/manage_script/tapstat.sh' 
+
+alias tapstop='kill -9 $(pgrep tap) 2> /dev/null'
+alias tapstart=' ~/manage_script/start_all.sh'
+alias tapver='~/manage_script/tapver.sh'
+
+#LOgin  STate
+alias lost='tail -n 20 ~/esunny.login/EventOutput'
+#MAnage State
+alias mast='tail -n 20 ~/esunny.manage/EventOutput'
+alias qufst='tail -n 20 ~/esunny.quotefront/EventOutput'
+alias rist='tail -n 20 ~/esunny.risk/EventOutput'
+alias sest='tail -n 20 ~/esunny.settle/EventOutput'
+alias trst='tail -n 20 ~/esunny.trade/EventOutput'
+alias trfst='tail -n 20 ~/esunny.tradefront/EventOutput'
+
+alias hisst='tail -n 20 ~/esunny.hisquote/EventOutput'
+
+alias pstap='ps aux | grep "tap"'
+alias etap='vim ~/esunny.tap'
+
+#=======for new tapquote
+# tapq for tap Quote
+alias tapqreset='tapqstop ; tapqstart ; tapqst'
+alias tapqst='~/manage_script/tapqstat.sh' 
+
+alias tapqstop='kill -9 $(pgrep comquote) 2> /dev/null;kill -9 $(pgrep hisquote) 2> /dev/null;kill -9 $(pgrep quotefront2) 2> /dev/null;echo ======== >> ~/esunny.comquote/EventOutput  ; echo ======== >> ~/esunny.quotefront2/EventOutput  ; echo ======== >> ~/esunny.hisquote/EventOutput '
+alias tapqstart='~/manage_script/start_all_quote.sh'
+alias tapqver='~/manage_script/tapqver.sh'
+
+#ComQuote STate
+alias cqst='tail -n 20 ~/esunny.comquote/EventOutput'
+alias qf2st='tail -n 20 ~/esunny.quotefront2/EventOutput'
+alias hisst='tail -n 20 ~/esunny.hisquote/EventOutput'
+
+#ComQuote All State
+alias cqast='cat ~/esunny.comquote/EventOutput'
+alias qf2ast='cat ~/esunny.quotefront2/EventOutput'
+alias hisast='cat ~/esunny.hisquote/EventOutput'
+
+alias cqreset='kill -9 $(pgrep comquote) 2> /dev/null; echo ======== >> ~/esunny.comquote/EventOutput; ~/bin/tapcomquote ;sleep 2; cat ~/esunny.comquote/EventOutput'
+alias hisreset='kill -9 $(pgrep hisquote) 2> /dev/null ; echo ======== >> ~/esunny.hisquote/EventOutput ; ~/bin/taphisquote ;sleep 2; cat ~/esunny.hisquote/EventOutput '
+alias qf2reset='kill -9 $(pgrep quotefront2) 2> /dev/null ; echo ======== >> ~/esunny.quotefront2/EventOutput ; ~/bin/tapquotefront2;sleep 2; cat ~/esunny.quotefront2/EventOutput'
+# for watch
+alias gwlog='~/bin/testlevel2api 192.168.18.12 11111'
+
+
+#=======for svn
+alias svn_mkprj='svn mkdir src;svn mkdir include;svn mkdir docutment;svn mkdir lib'
+alias svnci='svn ci -m'
+#=======for programing
+alias tt='make ; ./test'
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+PS1='\t  \u  @\h \n\w$'
+#export LD_LIBRARY_PATH='~/gb_develop_space/projects/QUOTE_REPLY_9_0/lib/:~/bin'
+export LD_LIBRARY_PATH='/home/esunny/bin'
+
