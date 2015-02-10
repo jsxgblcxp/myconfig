@@ -1,5 +1,5 @@
 " This is something to do.  " for map , c means  something 
-"           C means  something else
+"          C means  something else
 "           here shall be some comment
 "
 "Remove all abbreviations I defined before 
@@ -64,6 +64,7 @@ command -nargs=1 DL call DeleteTheLinesWithTheWordOf( "<args>" )
 command -nargs=1 DW call DeleteWord( "<args>" )
 nnoremap \dw yiw:call DeleteWord( "<C-R>0" ) <cr>
 
+
 " Loat local vim files once it exist----------------{{{
 if filereadable( ".\\session.vim" )
         source .\session.vim
@@ -103,6 +104,7 @@ filetype indent on
 
 " returns----------------{{{
 iabbrev rt return ;<ESC>k
+iabbrev re return
 iabbrev rtt return true;<ESC>
 iabbrev rtf return false;<ESC>
 iabbrev rt0 return 0;<ESC>
@@ -112,6 +114,7 @@ iabbrev rtn return NULL;<ESC>
 
 " branch----------------{{{
 iabbrev if if ( ) {<cr>}<ESC>k3la
+iabbrev _if if
 iabbrev ife if ( ) {<cr>} else {<cr>}<ESC>2k3la
 iabbrev eif <space>else if ( ) {<cr>}<ESC>k^f(a
 iabbrev es <space>else {<cr>}<ESC>k$a
@@ -349,13 +352,20 @@ nnoremap \9 :tabn 9<cr>
 nnoremap \0 :tabn 10<cr>
 nnoremap nl :tabn<cr>
 nnoremap ns :tabp<cr>
-nnoremap \n :tabnew ../document/note.txt<cr>
+nnoremap \n :tabnew note.txt<cr>
+nnoremap \en :edit note.txt<cr>
+command EREF tabnew .\ref_4_user.txt
+command EREF2 tabnew .\ref_4_coder.txt
 
 "}}}
 
 " Help to quick edit and config---------------{{{
 nnoremap <leader>ev :tabnew $MYVIMRC<cr>
-nnoremap <leader>et :tabnew tmp.cpp<cr>
+nnoremap <leader>et :tabnew tmp/_tmp.cpp<cr>
+nnoremap <leader>ed :tabnew tmp/_done.cpp<cr>
+nnoremap <leader>eo :tabnew tmp/_todo.cpp<cr>
+nnoremap <leader>em :tabnew makefile<cr>
+
 
 nnoremap <leader>sv :source $MYVIMRC<cr>
 augroup filetype_vim
@@ -378,7 +388,8 @@ highlight statuslineNC guibg=darkred guifg=lightyellow
 highlight Comment guifg=lightgrey gui=bold
 highlight visual guifg=black guibg=white
 
-highlight Normal ctermbg=black
+
+highlight Normal ctermbg=black ctermfg=white
 highlight Pmenu ctermbg=DarkBlue ctermfg=Green
 highlight Folded ctermbg=NONE ctermfg=gray
 highlight Cursor ctermfg=black ctermbg=green
@@ -489,6 +500,7 @@ augroup echo_group
 augroup END
 
 autocmd InsertLeave * write
+
 "autocmd InsertLeave *.vim source %
 "}}}
 
@@ -512,8 +524,8 @@ onoremap . f.
 "remove all the tabs in the file
 nnoremap <leader>d<tab> :%s/[ \t]*//g<cr> 
 nnoremap <leader>a<space> :%s/(/( /g<cr>:%s/)/ )/g<cr>:%s/,/ , /g<cr>
-nnoremap <leader>p $p
 nnoremap <leader>i pkJ
+command PP set paste!
 nnoremap <leader>q :q<cr>
 
 "Under line the current lines
@@ -537,7 +549,14 @@ function! AddDefineProtectionToCppHeaderFile()
         execute "e  " . fileNameWithNoExtend . ".h"
         write
 endfunction
+function! H_CPP_pairCreate(fileName)
+        exec "tabnew " . a:fileName . ".h"
 
+        exec "edit " . a:fileName . ".cpp"
+        call AddIncludeOfCorrespondingHeaderFile()
+endfunction
+
+command! -nargs=1 New call H_CPP_pairCreate("<args>")
 function! AddIncludeOfCorrespondingHeaderFile()
         let headerName = expand( "%:t:r" ) . '.h'
         call append( 0 , "\#include \"" . headerName . "\"" )
@@ -567,12 +586,14 @@ map \aa :call JumpToDebugMsg()<cr>ggyG:call JumpBackForDebug()<cr>gg/$$$<cr>pkda
 nnoremap <leader>er :tabnew r.bat<cr> 
 
 "inoremap <cr> <esc>o;<esc>i
-iabbrev vector vector< >$<ESC>2hi
-iabbrev map map< , $ >$ <ESC>7hi
+iabbrev vector vector< > $<ESC>2hi
+iabbrev map map< , $ > $<ESC>7hi
+iabbrev list list< > $ <ESC>F<a
+iabbrev listi list< >::iterator $<esc>F<a
 
 "Delete lines with this word
-vnoremap <leader>dl "+y:%s/\v.*<C-R>+.*$<cr>
-vnoremap <leader>da "+y:%s/<C-R>+//g<cr>
+nnoremap <leader>dl yiw:%s/\v.*<C-R>0.*\n//<cr>
+nnoremap <leader>da yiw:%s/<C-R>0//g<cr>
 nnoremap <leader><leader>n :%s/\n\n//g<cr>
 "}}}
 
@@ -684,12 +705,13 @@ iabbrev _done //  ___________{ done }_________________ <esc>mA
 vnoremap <leader>sv d?done<cr>P/done<cr>ko<esc>/fix_list<cr>
 
 "Command lock and unlock
-iabbrev todo To_Do[ ]<esc>F[a
+iabbrev todo to_do[ ]<esc>F[a
 inoremap "" ""<esc>i
 "complete in just this file
 inoremap <c-j> <c-x><c-n>
 nnoremap <leader>ep :tabnew posi.vim<cr>
 nnoremap <leader>sp :source posi.vim<cr>
+
 
 nnoremap <leader>st :source %<cr>
 nmap <leader>add yy\hpA;<esc>
@@ -698,6 +720,7 @@ nmap <leader>f /<c-r>0<cr>
 let EasyFilterPath = "~/easy"
 command! -nargs=0 DAYLOG exec printf("tabnew %s/work_day_log" , EasyFilterPath )
 iabbrev _log ____________________________<space><esc>:r !date/T<cr>____________________________<esc>
+iabbrev _ti  ____________________________  ___________________________<esc>bbea
 inoremap __+ cout << "____________________________" << endl;
 
 " my code factory
@@ -706,7 +729,7 @@ inoremap __+ cout << "____________________________" << endl;
 command! GC  read code_factory/code_production
 
 "Make Code
-command! MC ! ./awk_it.sh 
+command! MC exec "! cat source_code | awk -f " g:currentAwkFileName " > code_production "
 
 "Close codeFactory
 command! CF cd .. | tabclose! 
@@ -717,19 +740,19 @@ command! VC !type .\code_factory\
 "Create Code
 command! -nargs=1 CC call OpenCodeFactory( "<args>" )
 
+let g:currentAwkFileName = ""
+ 
 function! OpenCodeFactory( creatorName )
-        if ! filereadable( "./code_factory" )
+        if ! filereadable( "code_factory/source_code" )
                 exec "! mkdir code_factory"
                 exec "! cp ~/.code_factory/* ./code_factory/"
+                exec "! svn add code_factory"
         endif
-        tabnew code_factory/awk_it.sh
-        normal ggdd
-        let newAwkFileName = a:creatorName . ".awk"
-        call append( 0 , "cp " . newAwkFileName . " working.awk" )
-        update
-        edit code_factory/source_code
-        exec "vsplit  code_factory/". newAwkFileName
-        if ! filereadable( "code_factory/" . newAwkFileName )
+        let g:currentAwkFileName = a:creatorName . ".awk"
+        tabnew code_factory/source_code
+        exec "vsplit  code_factory/". g:currentAwkFileName
+
+        if 1 == line( "." ) " when there is nohting in the file
                 call append( 0 , "BEGIN{" )
                 call append( 1 , "}" )
                 call append( 2 , "{" )
@@ -741,6 +764,8 @@ function! OpenCodeFactory( creatorName )
         split code_factory/code_production
         setlocal autoread
         exec "normal! \<c-w>\<c-h>"
+        " move to the 3rd line 
+        exec "3" 
         cd code_factory
         " fill the source code with the data visualed.
 endfunction
@@ -863,6 +888,7 @@ endfunction
 command! -nargs=* Ansi    let g:header_sparator =  ' '| let g:field_saparator = ',' | let g:field_value_key_spaparator = ':' | call BuildArgs(<f-args>)
 command! -nargs=* YHAnsi  let g:header_sparator =  ']'| let g:field_saparator = ',' | let g:field_value_key_spaparator = ':' | call BuildArgs(<f-args>)
 command! -nargs=* FIXAnsi let g:field_saparator = ' ' | let g:header_sparator = ' ' | let g:field_value_key_spaparator = '=' | call BuildArgs(<f-args>) 
+
 "Read Ini
 command! -nargs=1 RIni normal ! ggdG | read <args>
 "}}}
@@ -952,3 +978,18 @@ endfunction
 nnoremap <leader>m4 :call Make4Winodw()<cr>
 " main func of C
 nnoremap <leader>bss yy:!<c-r>0<cr>
+abbrev dowh do{<cr>} while( $ );<esc>?do<cr>
+iabbrev frit for(::iterator it = $.begin() ;<cr> it != $.end() ;<cr> ++ it )<esc>2k0f:ljdwjdw2k0f:i
+
+
+" for svn ----------------{{{
+"
+iabbrev _svn <esc>:call SvnLogAutoFill()<cr>
+function! SvnLogAutoFill()
+        call append( 0 ,  "[version]:  v0.1" )
+        call append( 1 ,  "[modification]:" )
+        call append( 2 ,  "1." )
+        call append( 3 ,  "2." )
+        exec "normal :3\<cr>"
+endfunction
+"  }}}
