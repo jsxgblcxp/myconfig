@@ -46,6 +46,7 @@ alias configgdb='vim -u ~/.gb_vimrc ~/.gdb_config'
 alias svn?='svn st | grep "^?"'
 alias sst='svn st'
 alias gst='git status'
+alias gph='git push'
 alias svnrevert=' svn ci -m "just add soemthing I am to remove later" >> svn_ci_info '
 
 alias lg='tail ./GwQuote_ch01/EventOutput '
@@ -112,22 +113,6 @@ export LD_LIBRARY_PATH=/home/gaobo/easy/gaobo_svn/guo_quickFIX_compile/src/C++:/
 export LIBRARY_PATH=~/libiconv-1.14/preload/.libs:~/libiconv-1.14/preload:~/libiconv-1.14/libcharset/lib/.libs:~/libiconv-1.14/lib:~/libiconv-1.14/lib/.libs:~/easy/test/cpp/
 
 #=======for position copy 
-export guoFAST=~/easy/guosen_fix_changed/guosen-fast/BuildTemp
-export stdFAST=~/easy/standard_quickFAST/quickfast_1_5_0
-export guoFIX=~/easy/guosen_fix_changed/guosen-fast/BuildTemp/quickfix-1.14.3
-export stdFIX=~/easy/quickfix
-export newFIX=~/easy/gaobo_svn/guo_quickFIX_compile/C++
-export guoDemo=~/easy/guosen-FASTdemo/
-export guoBuildBackup=/home/gaobo/easy/gaobo_svn/back_up_file/guosen-lib-src-build
-export fifoToClient=~/easy/gaobo_svn/fifo_to_client
-export hundsunToFifo=~/easy/gaobo_svn/hundsun_to_fifo/src
-export hisQuoteSync=~/easy/gaobo_svn/his_quote_sync
-export h5_subscriber=/home/gaobo/easy/gaobo_git/exchange/src/h5_subscriber
-#export h5_dispatcher=/home/gaobo/easy/gaobo_git/exchange/src/h5_dispatcher
-export a_out_dir=/home/gaobo/easy/gaobo_svn/a_out_progs
-export ht_trade=/home/gaobo/easy/gaobo_svn/htsc_hundsun_trade/src
-export gs_trade=/home/gaobo/easy/gaobo_svn/gs_trade_fix
-
 
 export EDITOR=vim
 alias tcpdumpFIXget='echo;echo;echo;echo;echo;sudo tcpdump -X -i eth0 ip host 58.61.28.213'
@@ -157,5 +142,64 @@ export -f pk
 
 gitadd() {
 	git status | grep "modified\:"   | awk ' {print $2 } ' | xargs git add
+	git status | grep "deleted\:"   | awk ' {print $2 } ' | xargs git add
+}
+
+bkcode() { 
+	gitadd
+	git commit -m "back up code"
+	git push
 }
 export -f gitadd
+export -f gitadd
+export -f bkcode
+
+#alias ipsee='ifconfig eth0'
+#alias cdipscript='cd  /etc/sysconfig/network-scripts/'
+#alias cdsyscfg='cd  /etc/sysconfig'
+#alias _enetwork='sudo vim -u /home/gaobo/.gb_vimrc  /etc/sysconfig/network'
+#alias _eeth0='sudo vim -u /home/gaobo/.gb_vimrc /etc/sysconfig/network-scripts/ifcfg-eth0'
+#alias _edns='sudo vim -u /home/gaobo/.gb_vimrc /etc/resolv.conf'
+#
+#reset_network() { 
+#	see_nk_setting
+#	sudo service network stop
+#	sudo service network start
+#}
+#export -f reset_network
+#
+#see_nk_setting() { 
+#	echo ------------ /etc/sysconfig/network ----------
+#	cat /etc/sysconfig/network  | grep -e "^[a-zA-Z]"
+#	echo ------------ /etc/sysconfig/network-scripts/ifcfg-eth0 ----------
+#	cat /etc/sysconfig/network-scripts/ifcfg-eth0  | grep -e "^[a-zA-Z]"
+#	echo ------------ /etc/resolv.conf ----------
+#	cat /etc/resolv.conf | grep -e "^[a-zA-Z]"
+#	echo ------------stop and start----------
+#}
+#export -f see_nk_setting
+#
+#
+#
+#
+#
+#alias _esshd='sudo vim -u /home/gaobo/.gb_vimrc /etc/ssh/sshd_config'
+#see_sshd_setting() { 
+#	echo ------------ /etc/ssh/sshd_config ----------
+#	sudo cat /etc/ssh/sshd_config | grep -e "^[a-zA-Z]"
+#}
+#export -f see_sshd_setting
+#
+#reset_sshd() { 
+#	see_sshd_setting
+#	sudo service sshd stop
+#	sudo service sshd start
+#}
+#export -f reset_sshd
+
+
+_rm() { 
+	mv $1 ~/.rubbish/
+}
+
+export -f _rm

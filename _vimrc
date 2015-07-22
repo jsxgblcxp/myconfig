@@ -109,6 +109,7 @@ iabbrev rtt return true;<ESC>
 iabbrev rtf return false;<ESC>
 iabbrev rt0 return 0;<ESC>
 iabbrev rtn return NULL;<ESC>
+iabbrev rtn1 return -1;<ESC>
 
 "}}}
 
@@ -122,14 +123,14 @@ iabbrev sw switch( )<cr>{<cr>default:<cr>break;<cr>}<ESC>4k6la
 
 nnoremap \def yy:call HeadFileJump()<cr>Gp$xo{<cr>}<esc>O
 
-iabbrev _out cout <<;<ESC>i
-iabbrev _oout cout << << ;<ESC>^7li
-iabbrev _ooout cout << <<  << ;<ESC>^7li
+iabbrev _out std::cout <<;<ESC>i
+iabbrev _oout std::cout << << ;<ESC>^7li
+iabbrev _ooout std::cout << <<  << ;<ESC>^7li
 
-iabbrev _endl cout << endl;<esc>
-iabbrev _outl cout << << endl;<ESC>^6la
-iabbrev _ooutl cout << <<  << endl;<ESC>^7li
-iabbrev _oooutl cout << <<  <<  << endl;<ESC>^7li
+iabbrev _endl std::cout << std::endl;<esc>
+iabbrev _outl std::cout << << std::endl;<ESC>02f<a
+iabbrev _ooutl std::cout << <<  << std::endl;<ESC>^7li
+iabbrev _oooutl std::cout << <<  <<  << std::endl;<ESC>^7li
 iabbrev _+ ____________________________
 iabbrev =+ <ESC>28a=<ESC>a
 iabbrev -+ <ESC>28a-<ESC>a
@@ -145,13 +146,14 @@ iabbrev _in cin >>;<ESC>i
 "}}}
 
 " Loops----------------{{{
-iabbrev fri for ($ i = 0 ; i < $ ; ++ i )<ESC>I<c-l>
-iabbrev frii for ( int i = 0 ; i < ; ++ i )<ESC>9ha
-iabbrev frj for ( int j = 0 ; j < ; ++ j )<ESC>9ha
-iabbrev fra for ( ; $ ; $ )<ESC>^5li
-iabbrev frir for ( int i = ; i >= 0 ; -- i )<cr>{<cr>}<ESC>2kt=la
-iabbrev forever for(;;){<cr>}ka
-iabbrev wh while ($ )<cr>{<cr>$<cr>}<ESC>3k^/\$<cr>cw
+iabbrev fri for ($ i = 0 ; i < $ ; ++ i ){<cr>$<cr>}<ESC>2kI<c-l>
+iabbrev frii for ( int i = 0 ; i <$ ; ++ i ){<cr>$<cr>}<ESC>2kI<c-l>
+iabbrev frj for ( int j = 0 ; j < ; ++ j ){<cr>$<cr>}<ESC>2kI<c-l>
+iabbrev fra for ($ ; $ ; $ ){<cr>$<cr>}<ESC>2kI<c-l>
+iabbrev frir for ( int i =$ ; i >= 0 ; -- i ){<cr>$<cr>}<ESC>2kI<c-l>
+iabbrev forever for(;;){<cr>}<esc>k
+iabbrev wh while ($ ){<cr>$<cr>}<ESC>2k^/\$<cr>cw
+
 "}}}
 
 " # define ----------------{{{
@@ -179,9 +181,10 @@ inoremap kj <esc>:call SourceIfisVimFile()<cr>
 inoremap _imap #include <map><esc>
 inoremap incl #include ""<esc>i
 inoremap inc #include <><esc>i
-iabbrev def #define
+inoremap _def #define
 iabbrev ifdef #ifdef<cr>#endif // $<esc>kA
 iabbrev ifdefe #ifdef<cr>#else<cr>#endif // $<esc>2kA
+iabbrev if0 #if 0<cr>#endif /* if 0 */<esc>2k
 iabbrev ifndef #ifndef<cr>#endif // $<esc>kA
 iabbrev ifndefe #ifndef<cr>#else<cr>#endif // $<esc>2kA
 
@@ -367,7 +370,7 @@ nnoremap <leader>eo :tabnew tmp/_todo.cpp<cr>
 nnoremap <leader>em :tabnew makefile<cr>
 
 
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>em :tabnew Makefile<cr>
 augroup filetype_vim
 	autocmd!
         autocmd FileType vim setlocal foldmethod=marker
@@ -421,7 +424,7 @@ endfunction
 
 "}}}
 
-command! -nargs=1 FA2 lvimgrep /\v<<args>>/ *.h  *.cpp **/*.h **/*.cpp | lopen
+command! -nargs=1 FA2 lvimgrep /\v<<args>>/ **/*.h **/*.cpp | lopen
 command! -nargs=1 FA1 lvimgrep /\v<args>/ **/*.h **/*.cpp | lopen
 command! -nargs=1 FT lvimgrep /\v<args>/ % | lopen
 
@@ -497,6 +500,7 @@ augroup echo_group
         autocmd BufNewFile *.h :call AddDefineProtectionToCppHeaderFile()
         autocmd BufWinLeave .bashrc :!source ~/.bashrc
         autocmd BufNewFile * :call AddToSvn()
+        autocmd BufNewFile *.sh : exec "! chmod +x "  . expand( "%p" )
 augroup END
 
 autocmd InsertLeave * write
@@ -525,7 +529,7 @@ onoremap . f.
 nnoremap <leader>d<tab> :%s/[ \t]*//g<cr> 
 nnoremap <leader>a<space> :%s/(/( /g<cr>:%s/)/ )/g<cr>:%s/,/ , /g<cr>
 nnoremap <leader>i pkJ
-command PP set paste!
+nnoremap <leader>PP :set paste!<cr>a
 nnoremap <leader>q :q<cr>
 
 "Under line the current lines
@@ -534,7 +538,7 @@ autocmd CursorHold * silent! exe printf('match _Underlined /\<%s\>/', expand('<c
 "}}}
 
 "To imporove to fit google's programming standard TAG_todo
-
+let g:currentProjName =  "NONAME00"
 function! AddDefineProtectionToCppHeaderFile()
         let fileNameWithNoExtend = expand( "%:t:r" )
         let protectKey = g:currentProjName .  toupper( fileNameWithNoExtend ) . "_H_"
@@ -583,7 +587,7 @@ endfunction
 map \aa :call JumpToDebugMsg()<cr>ggyG:call JumpBackForDebug()<cr>gg/$$$<cr>pkdaw=i{
 
 "edit r.bat
-nnoremap <leader>er :tabnew r.bat<cr> 
+nnoremap <leader>er :tabnew t.sh<cr> 
 
 "inoremap <cr> <esc>o;<esc>i
 iabbrev vector vector< > $<ESC>2hi
@@ -697,6 +701,9 @@ endfunction
 command! -nargs=* ReplaceAll call GlobalReplace( <f-args> )
 
 iabbrev spf sprintf($ , "$" , $ );<esc>I<c-l>
+iabbrev snpf snprintf($ , $ , "$" , $ );<esc>I<c-l>
+iabbrev fpf fprintf( stderr ,$ );<esc>I<c-l>
+iabbrev pf printf($ );<esc>I<c-l>
 
 nnoremap <leader>t<leader> :tabnew tmp<cr>
 nnoremap <leader>tt :e tmp.cpp<cr> 
@@ -720,6 +727,7 @@ nmap <leader>f /<c-r>0<cr>
 let EasyFilterPath = "~/easy"
 command! -nargs=0 DAYLOG exec printf("tabnew %s/work_day_log" , EasyFilterPath )
 iabbrev _log ____________________________<space><esc>:r !date/T<cr>____________________________<esc>
+command! -nargs=0 NOTE exec printf("tabnew %s/tmp_work_note" , EasyFilterPath )
 iabbrev _ti  ____________________________  ___________________________<esc>bbea
 inoremap __+ cout << "____________________________" << endl;
 
