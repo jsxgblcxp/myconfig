@@ -76,23 +76,6 @@ endif
 
 "}}}
 
-" Basic Setting----------------{{{
-set number                      "Show line number 
-set shiftwidth=8                "set number of spaces to use for each step of (auto)indent.
-set tabstop=8                   "set number of spaces of one tab
-set foldmethod=syntax           "The kind of folding used for the current window
-set nobackup                    "Do not save backup file
-set nolinebreak                 "Do not break a line
-set nowritebackup               "Do not save bacup file while editing
-set laststatus=2                "Always show the status
-set statusline=%F\ -\ FileType:%y\ \ \ \ \ \ \ \ \ \ [Warnning\ \!\]\ IS\ IT\ THE\ PROBLEM\ OF\ ABILITY\ OR\ ATTUTUDE\?\ \ \ \ \ \ %l\/%L:%c
-set textwidth=2000              "set line break to infinite
-"set nohlsearch                 "Do note highlight search result
-"set cursorline                  "highlight current line
-set nocompatible
-set expandtab                   "Convert tab into space while inputing
-"}}}
-
 syntax on
 filetype on
 filetype plugin on
@@ -114,8 +97,7 @@ iabbrev rtn1 return -1;<ESC>
 "}}}
 
 " branch----------------{{{
-iabbrev if if ( ) {<cr>}<ESC>k3la
-iabbrev _if if
+
 iabbrev ife if ( ) {<cr>} else {<cr>}<ESC>2k3la
 iabbrev eif <space>else if ( ) {<cr>}<ESC>k^f(a
 iabbrev es <space>else {<cr>}<ESC>k$a
@@ -136,7 +118,6 @@ iabbrev =+ <ESC>28a=<ESC>a
 iabbrev -+ <ESC>28a-<ESC>a
 
 iabbrev --> <ESC>10a-<ESC>a>
-iabbrev bk break;<ESC>
 "iabbrev _oo  <ESC>a<< <ESC>3hi
 iabbrev _in cin >>;<ESC>i
 "iabbrev _iin cin >> >> ;<ESC>^5la
@@ -152,7 +133,6 @@ iabbrev frj for ( int j = 0 ; j < ; ++ j ){<cr>$<cr>}<ESC>2kI<c-l>
 iabbrev fra for ($ ; $ ; $ ){<cr>$<cr>}<ESC>2kI<c-l>
 iabbrev frir for ( int i =$ ; i >= 0 ; -- i ){<cr>$<cr>}<ESC>2kI<c-l>
 iabbrev forever for(;;){<cr>}<esc>k
-iabbrev wh while ($ ){<cr>$<cr>}<ESC>2k^/\$<cr>cw
 
 "}}}
 
@@ -196,7 +176,6 @@ inoremap ustd using std::;<esc>i
 iabbrev  uns using namespace std;<esc>
 
 "}}}
-
 "map and containerwork----------------{{{
 inoremap _map map< $ , $ >$<esc>^f$cw
 inoremap _mit map< $ , $ >::iterator$<esc>^f$cw
@@ -242,11 +221,28 @@ iabbrev virt virtual()=0;<esc>Fla
 "}}}
 
 "comments ----------------{{{
-nnoremap <BS> I//<esc>
-nnoremap =<BS> ^xx<esc>
 
-vnoremap <BS> :s/^/\/\/<cr>
-vnoremap =<BS> :s/^\/\///<cr>
+
+autocmd FileType c nnoremap <BS> I//<esc>
+autocmd FileType c nnoremap =<BS> ^xx<esc>
+autocmd FileType c vnoremap <BS> :s/^/\/\/<cr>
+autocmd FileType c vnoremap =<BS> :s/^\/\///<cr>
+
+autocmd FileType cpp nnoremap <BS> I//<esc>
+autocmd FileType cpp nnoremap =<BS> ^xx<esc>
+autocmd FileType cpp vnoremap <BS> :s/^/\/\/<cr>
+autocmd FileType cpp vnoremap =<BS> :s/^\/\///<cr>
+
+autocmd FileType python nnoremap <BS> I#<esc>
+autocmd FileType python nnoremap =<BS> ^x<esc>
+autocmd FileType python vnoremap <BS> :s/^/#/<cr>
+autocmd FileType python vnoremap =<BS> :s/^#//<cr>
+
+autocmd FileType sql nnoremap <BS> I#<esc>
+autocmd FileType sql nnoremap =<BS> ^x<esc>
+autocmd FileType sql vnoremap <BS> :s/^/#/<cr>
+autocmd FileType sql vnoremap =<BS> :s/^#//<cr>
+
 
 nnoremap \ac :s/^/\/\/<cr>/_______________<cr>
 nnoremap \rc :s/\/\//<cr>/_______________<cr>
@@ -364,24 +360,29 @@ command EREF2 tabnew .\ref_4_coder.txt
 
 " Help to quick edit and config---------------{{{
 nnoremap <leader>ev :tabnew $MYVIMRC<cr>
-nnoremap <leader>et :tabnew tmp/_tmp.cpp<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ed :tabnew tmp/_done.cpp<cr>
 nnoremap <leader>eo :tabnew tmp/_todo.cpp<cr>
-nnoremap <leader>em :tabnew makefile<cr>
-
+nnoremap <leader>et :vsp tmp/_tmp.cpp<cr>
+                        "  check whether dir exist and the type of the file
 
 nnoremap <leader>em :tabnew Makefile<cr>
-augroup filetype_vim
+augroup filetype_setting
 	autocmd!
         autocmd FileType vim setlocal foldmethod=marker
-        autocmd FileType vim setlocal foldmethod=marker
+        autocmd FileType python setlocal foldmethod=indent
 
+        autocmd FileType python nnoremap <leader>et :vsp tmp/_tmp.py<cr>
+        autocmd FileType cpp nnoremap <leader>et :vsp tmp/_tmp.cpp<cr>
+        autocmd FileType sql nnoremap <leader>et :vsp tmp/_tmp.sql<cr>
+        autocmd FileType c  nnoremap <leader>et :vsp tmp/_tmp.c<cr>
+        autocmd FileType sql  nnoremap <leader>et :vsp tmp/_tmp.sql<cr>
 augroup END
 "}}}
 
 " My highlight setting ----------------{{{
 
-highlight Normal guibg=Black
+highlight Normal guibg=lightgreen
 highlight Pmenu guibg=DarkBlue guifg=Green
 highlight Folded guibg=NONE guifg=gray
 highlight Cursor guifg=black guibg=green
@@ -392,7 +393,7 @@ highlight Comment guifg=lightgrey gui=bold
 highlight visual guifg=black guibg=white
 
 
-highlight Normal ctermbg=black ctermfg=white
+highlight Normal ctermbg=none ctermfg=white
 highlight Pmenu ctermbg=DarkBlue ctermfg=Green
 highlight Folded ctermbg=NONE ctermfg=gray
 highlight Cursor ctermfg=black ctermbg=green
@@ -400,9 +401,11 @@ highlight cursorline ctermbg=darkgrey
 highlight statusline ctermbg=red ctermfg=yellow
 highlight statuslineNC ctermbg=darkred ctermfg=yellow
 highlight Comment ctermfg=lightgrey cterm=bold
-highlight visual ctermfg=black ctermbg=white
-highlight _Underlined term=underline cterm=underline
+highlight _Underlined term=underline cterm=underline ctermbg=blue
 highlight PreProc ctermfg=green
+
+"highlight visual ctermfg=none ctermbg=green   cterm=reverse   
+highlight visual   cterm=reverse   
 "}}}
 
 " Searchs ----------------{{{
@@ -424,8 +427,14 @@ endfunction
 
 "}}}
 
-command! -nargs=1 FA2 lvimgrep /\v<<args>>/ **/*.h **/*.cpp | lopen
-command! -nargs=1 FA1 lvimgrep /\v<args>/ **/*.h **/*.cpp | lopen
+command! -nargs=1 FA2 lvimgrep /\v<<args>>/ **/*.h **/*.cpp  **/*.c | lopen
+command! -nargs=1 FA1 lvimgrep /\v<args>/ **/*.h **/*.cpp **/*.c | lopen
+command! -nargs=1 FApy2 lvimgrep /\v<<args>>/  **/*.py | lopen
+command! -nargs=1 FApy1 lvimgrep /\v<args>/ **/*.py | lopen
+
+command! -nargs=1 FAphp2 lvimgrep /\v<<args>>/  **/*.php | lopen
+command! -nargs=1 FAphp1 lvimgrep /\v<args>/ **/*.php | lopen
+
 command! -nargs=1 FT lvimgrep /\v<args>/ % | lopen
 
 function! SearchWithinVisualLine(Regex)
@@ -442,7 +451,6 @@ nnoremap <leader>W viw"0y:call ShowList( "<C-R>0" )<cr>
 
 nmap \fw "0yiw<c-w>w/<c-r>0<cr>
 "}}}
-
 
 " Just to control vim----------------{{{
 "close current buffer
@@ -466,7 +474,7 @@ nnoremap <leader>ss 0y$:<c-r>0<cr>
 map \l :set cursorline!<cr>
 "run r.bat
 map <F9> :w<cr>:!r<cr>
-nmap <c-F9> :!ctags -R .<cr>
+command! TAG !ctags -R .
 " 'Good Bye' Save the current gvim settings
 command GB mapclear| mksession! .\session.vim |  wqall
 " 'Clean Sessions file'
@@ -488,7 +496,7 @@ inoremap <c-a> <esc>A
 " Say hi when a new file created----------------{{{
 function! AddToSvn()
         write
-        exec "! svn add " . expand( "%:t" )
+        " exec "! svn add " . expand( "%:t" )
 endfunction
 
 
@@ -528,6 +536,7 @@ onoremap . f.
 "remove all the tabs in the file
 nnoremap <leader>d<tab> :%s/[ \t]*//g<cr> 
 nnoremap <leader>a<space> :%s/(/( /g<cr>:%s/)/ )/g<cr>:%s/,/ , /g<cr>
+
 nnoremap <leader>i pkJ
 nnoremap <leader>PP :set paste!<cr>a
 nnoremap <leader>q :q<cr>
@@ -672,17 +681,6 @@ endif
 
 "}}}
 
-command -nargs=0 CDLMX cd C:\lme\LMXFIXGateway
-command -nargs=0 CDLME cd C:\lme\LME3.0Gateway\FFastFillFixGateway | source posi.vim
-command -nargs=0 CDDH cd C:\dahua9.0TradeGateway\DaHua0.9\DaHua0.9
-command -nargs=0 CDNE cd C:\NewEdge\NewEdge3.0Gateway\FFastFillFixGateway | source posi.vim
-command! -nargs=0 CE cd ~/gb_develop_space/easy/
-command -nargs=0 LMEHASH cd C:\easy\lme_hash_test2\lme_hash_test2
-command! -nargs=0 CD39 cd c:\VersionConvert_3to9\VersionConvert_3to9 | source posi.vim
-command! -nargs=0 CDSR cd C:\sungard\Sungard3.0Gateway\FFastFillFixGateway\ | source posi.vim
-command! -nargs=0 CDQR cd ~/projects/QUOTE_REPLY_9_0/src | source posi.vim
-
-
 vnoremap <leader>NN y:tabnew tmp.cpp<cr>ggp
 iabbrev _fdm function define modified
 
@@ -732,6 +730,7 @@ iabbrev _ti  ____________________________  ___________________________<esc>bbea
 inoremap __+ cout << "____________________________" << endl;
 
 " my code factory
+"
 " ____________________________ {{{
 "Get Code
 command! GC  read code_factory/code_production
@@ -754,7 +753,7 @@ function! OpenCodeFactory( creatorName )
         if ! filereadable( "code_factory/source_code" )
                 exec "! mkdir code_factory"
                 exec "! cp ~/.code_factory/* ./code_factory/"
-                exec "! svn add code_factory"
+                #exec "! svn add code_factory"
         endif
         let g:currentAwkFileName = a:creatorName . ".awk"
         tabnew code_factory/source_code
@@ -1001,3 +1000,67 @@ function! SvnLogAutoFill()
         exec "normal :3\<cr>"
 endfunction
 "  }}}
+"
+" Basic Setting----------------{{{
+set number                      "Show line number 
+set autoindent                   
+set shiftwidth=8                "set number of spaces to use for each step of (auto)indent.
+set tabstop=8                   "set number of spaces of one tab
+set softtabstop=8               
+
+set foldmethod=syntax           "The kind of folding used for the current window
+set nobackup                    "Do not save backup file
+set nolinebreak                 "Do not break a line
+set nowritebackup               "Do not save bacup file while editing
+set laststatus=2                "Always show the status
+set statusline=%F\ -\ FileType:%y\ \ \ \ \ \ \ \ \ \ [Warnning\ \!\]\ IS\ IT\ THE\ PROBLEM\ OF\ ABILITY\ OR\ ATTUTUDE\?\ \ \ \ \ \ %l\/%L:%c
+set textwidth=2000              "set line break to infinite
+"set nohlsearch                 "Do note highlight search result
+"set cursorline                  "highlight current line
+set nocompatible
+set splitright
+set expandtab                   "Convert tab into space while inputing
+set guifont=Courier\ 10\ Pitch\ 9
+
+"}}}
+
+" for_python ----------------{{{
+iabbrev ifma if '__main__' ==  __name__ :<esc>
+"  }}}"
+"
+let php_folding = 1
+
+syntax on
+filetype on
+filetype plugin on
+filetype indent on
+
+iabbrev vd var_dump( );<esc>F(a
+iabbrev pt print
+
+
+
+
+iabbrev _form <form method=""<esc>A  action="$"><cr></form><esc>kf=
+iabbrev _itext <input type="text"  name=""<esc>A><esc>=02f=
+iabbrev _itextarea <input type="textarea"  name=""<esc>A><esc>=02f=
+iabbrev _iradio  <input type="radio"  name=""<esc>A value="$"  ><esc>=02f=
+iabbrev _isub  <input type="submit"  name=""<esc>A value="$"  ><esc>=02f=
+iabbrev _html <html><cr><body><cr></body><cr></html><esc>3k
+iabbrev _br <br><esc>
+
+iabbrev span <span class="error"></span><esc>F"
+
+
+
+autocmd FileType cpp   iabbrev if if ( ) {<cr>}<ESC>k3la
+autocmd FileType c iabbrev if if ( ) {<cr>}<ESC>k3la
+autocmd FileType python iabbrev if if :<esc>hi
+
+autocmd FileType c   iabbrev bk break;<ESC>
+autocmd FileType cpp  iabbrev bk break;<ESC>
+autocmd FileType python iabbrev bk break<esc>
+
+autocmd FileType c iabbrev wh while ($ ){<cr>$<cr>}<ESC>2k^/\$<cr>cw
+autocmd FileType cpp iabbrev wh while ($ ){<cr>$<cr>}<ESC>2k^/\$<cr>cw
+autocmd FileType python iabbrev wh while :<esc>Fea

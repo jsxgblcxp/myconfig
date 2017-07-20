@@ -1,0 +1,76 @@
+alias ls='ls -G'
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+alias cll='cls ;ll'
+alias cla='cls ;la'
+alias cl='cls ;l'
+alias lc='ll *.c'
+alias cx='cd ..'
+alias ins='sudo apt-get install'
+alias remove='sudo apt-get remove'
+alias findpkg='apt-cache search'
+alias cls='clear'
+alias uc='sudo shutdown -c'
+alias rs='source ~/.bashrc'
+alias bash_set='vim ~/.bashrc'
+alias mt='sudo mount -o umask=000'
+alias um='sudo umount'
+alias um_flash='um /mnt'
+alias ce='cd ~/easy/'
+alias r='./t.sh'
+alias rr='./t1.sh'
+alias cd..='cd ..'
+alias mylib='cd ~/gb_develop_space/projects/mylib/'
+alias _ev='vim ~/.bashrc'
+alias _ealiase='vim ~/.bash_aliases'
+alias _eexport='vim ~/.bash_export'
+alias _etmux='vim ~/.tmux.sh'
+alias _sv='source ~/.bashrc'
+alias dbws='cd ~/easy/leveldb'
+
+alias _mv='mv --backup'
+alias cb='cd -'
+alias st='cd ~/gb_develop_space/projects/c_cpp/' 
+alias cdpj='cd ~/gb_develop_space/projects/' 
+
+alias .gdb='gdb -x ~/gb_develop_space/.gdb_config '
+alias configgdb='vim ~/gb_develop_space/.gdb_config'
+alias svn?='svn st | grep "^?"'
+alias sst='svn st'
+alias sbk='svn commit -m "bakcup code"'
+alias svnrevert=' svn ci -m "just add soemthing I am to remove later" >> svn_ci_info '
+
+alias tag='ctags -R .'
+
+alias manstl='w3m /usr/share/doc/stl-manual/html/stl_index.html'
+
+alias tvmws='cd  ~/easy/tvm_proj/'
+
+# for watch
+alias sshsh='ssh $shanghai'
+alias sshtest='ssh $test_machine'
+
+#=======for svn
+alias svn_mkprj='svn mkdir src;svn mkdir include;svn mkdir docutment;svn mkdir lib'
+alias svnci='svn ci -m'
+#=======for programing
+alias tt='make ; ./test'
+alias test='cd ~/ubuntu_bk/gaobo/easy/test/'
+alias cpptest='cd ~/easy/cpp_test/'
+alias pytest='cd ~/ubuntu_bk/gaobo/easy/test/pytest/'
+# see keys
+alias rk='view /home/jsxgblcxp/from_mac/gaobo/old_machine/iplist2.txt'
+alias ek='vim /home/jsxgblcxp/from_mac/gaobo/old_machine/iplist2.txt'
+
+alias gek='gvim ~/easy/tvm_proj/cards/iplist2.txt'
+
+alias cdtmp='cd ~/easy/tmp_dir/'
+alias ssh_comp='ssh $svn_server'
+alias py='python'
+
+alias get_queue_count='cd /home/jsxgblcxp/from_mac/gaobo/easy/tvm_watch/get_ad_queue_history && ./t.sh && ls'
+alias nopwd_setting='cd /home/jsxgblcxp/from_mac/gaobo/easy/tvm_watch/sh_scripts/expect/machine_ini && vim run.sh'
+alias Enote=' cd  /home/jsxgblcxp/from_mac/gaobo/easy/note && vim . '
+
+alias dbvim=' cd  /home/jsxgblcxp/easy/db_work/ &&  vim'

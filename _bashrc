@@ -1,179 +1,130 @@
-# .bashrc
 
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# User specific aliases and functions
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
 
-alias ls='ls -h --color'
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -CF'
-alias cll='cls ;ll'
-alias cla='cls ;la'
-alias cl='cls ;l'
-alias lc='ll *.c'
-alias cx='cd ..'
-alias ins='sudo apt-get install'
-alias remove='sudo apt-get remove'
-alias cls='clear'
-alias clean='make -i clean'
-alias uc='sudo shutdown -c'
-alias rs='source ~/.bashrc'
-alias bash_set='vim ~/.bashrc'
-alias mt='sudo mount -o umask=000'
-alias um='sudo umount'
-alias um_flash='um /mnt'
-alias ce='cd ~/easy/'
-alias r='./t.sh'
-alias rr='./t1.sh'
-alias cd..='cd ..'
-alias test='cd ~/easy/test/cpp'
-alias _ev='vim ~/.bashrc'
-alias _sv='source ~/.bashrc_bk'
-alias _em='vim Makefile'
-alias _eb='vim t.sh'
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
 
-alias _mv='mv --backup'
-alias cb='cd -'
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
 
-alias .gdb='gdb -x ~/.gdb_config '
-alias configgdb='vim ~/.gdb_config'
-alias svn?='svn st | grep "^?"'
-alias sst='svn st'
-alias gst='git status'
-alias gph='git push'
-alias svnrevert=' svn ci -m "just add soemthing I am to remove later" >> svn_ci_info '
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
 
-alias lg='tail ./GwQuote_ch01/EventOutput '
-alias lgm='tail -n 20  ./GwQuote_ch01/EventOutput '
-alias pps='ps aux | grep "debug"'
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
 
-alias tag='ctags -R .'
-
-#=======for svn
-alias svn_mkprj='svn mkdir src;svn mkdir include;svn mkdir docutment;svn mkdir lib'
-alias svnci='svn ci -m'
-#=======for programing
-alias tt='make ; ./test'
+# some more ls aliases
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-PS1='							\t  \u  @\h \n\w$'
 
-#=======for mysql
-alias sqlin='mysql -u test -p'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+if [ -f ~/.bash_export ]; then
+    . ~/.bash_export
+fi
+
+if [ -f ~/.tmux.sh ]; then
+    . ~/.tmux.sh
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+#____________________________  gb config 
 
 
-#=======for FIX 
-
-alias tag='ctags -R .'
-alias seeld='echo $LD_LIBRARY_PATH'
-alias fn='find . -name'
-alias mr='> t.sh && chmod +x t.sh && vim t.sh'
-alias sz='du -sh'
-
-alias fget='cp -r ~/common/get/* . && mv ~/common/get/* ~/common/backup'
-export sendBox=~/common/send/
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
 
 
-#clear
-#echo " =============  our will shall be done =============  "
 
-#export LD_LIBRARY_PATH=~/easy/guosen_fix/quickfast_1_5_0/lib:~/easy/guosen_fix/quickfast_1_5_0/lib_require/boost_1_47_0/lib/
-
-#export LD_LIBRARY_PATH=/home/gaobo/easy/gaobo_svn/guo_quickFIX_compile/src/C++:/home/gaobo/easy/guosen_fix_changed/guosen-fast/BuildTemp/boost_1_49_0/stage/lib:/home/gaobo/easy/guosen_fix_changed/guosen-fast/BuildTemp/quickfast_1_5_0/lib:/home/gaobo/easy/gaobo_svn/hundsun_to_fifo/lib/lib-linux-32:/home/gaobo/easy/gaobo_svn/hundsun_to_fifo/lib/lib-linux-64:/home/gaobo/easy/test/enca-1.16/lib/.libs:/home/gaobo/easy/test/libevent-2.0.22-stable/.libs:~/easy/gaobo_svn/htsc_hundsun_trade/lib/linux.x64/
-# export LIBRARY_PATH=~/libiconv-1.14/preload/.libs:~/libiconv-1.14/preload:~/libiconv-1.14/libcharset/lib/.libs:~/libiconv-1.14/lib:~/libiconv-1.14/lib/.libs:~/easy/test/cpp/
-
-#=======for position copy 
-
-export EDITOR=vim
-#alias tcpdumpFIXget='echo;echo;echo;echo;echo;sudo tcpdump -X -i eth0 ip host 58.61.28.213'
-#alias tcpdumpFIXput='echo;echo;echo;echo;echo;sudo tcpdump -X -i eth0 ip dst 58.61.28.213'
-#alias encodeChange='enca -L zh_CN -x UTF-8'
+PS1='\t  \u  @\h \n\w$'
 
 
-#===== ntp upadte 
-
-#ntpupdate()
-#{
-#	while (( 0 < 1 ))
-#       	do
-#		sleep 3m
-#		sudo ntpdate 0.cn.pool.ntp.org  > /dev/null;
-#	done
-#}
+#xrandr --output LVDS1 --mode 1024x768 --output VGA2 --mode 1920x1080 --left-of LVDS1
+#valgrind --tool=callgrind  ./acrServer
 #
-#ntpupdate &
-alias cronroot='sudo crontab -u root -e'
-ulimit -c unlimited
-
-pk() {
-	kill -9 $(pgrep $1);
-}
-export -f pk
-
-gitadd() {
-	git status | grep "modified\:"   | awk ' {print $2 } ' | xargs git add
-	git status | grep "deleted\:"   | awk ' {print $2 } ' | xargs git add
-}
-
-bkcode() { 
-	gitadd
-	git commit -m "back up code"
-	git push
-}
-export -f gitadd
-export -f gitadd
-export -f bkcode
-
-#alias ipsee='ifconfig eth0'
-#alias cdipscript='cd  /etc/sysconfig/network-scripts/'
-#alias cdsyscfg='cd  /etc/sysconfig'
-#alias _enetwork='sudo vim  /etc/sysconfig/network'
-#alias _eeth0='sudo vim /etc/sysconfig/network-scripts/ifcfg-eth0'
-#alias _edns='sudo vim /etc/resolv.conf'
-#
-#reset_network() { 
-#	see_nk_setting
-#	sudo service network stop
-#	sudo service network start
-#}
-#export -f reset_network
-#
-#see_nk_setting() { 
-#	echo ------------ /etc/sysconfig/network ----------
-#	cat /etc/sysconfig/network  | grep -e "^[a-zA-Z]"
-#	echo ------------ /etc/sysconfig/network-scripts/ifcfg-eth0 ----------
-#	cat /etc/sysconfig/network-scripts/ifcfg-eth0  | grep -e "^[a-zA-Z]"
-#	echo ------------ /etc/resolv.conf ----------
-#	cat /etc/resolv.conf | grep -e "^[a-zA-Z]"
-#	echo ------------stop and start----------
-#}
-#export -f see_nk_setting
-#
-#
-#
-#
-#
-#alias _esshd='sudo vim /etc/ssh/sshd_config'
-#see_sshd_setting() { 
-#	echo ------------ /etc/ssh/sshd_config ----------
-#	sudo cat /etc/ssh/sshd_config | grep -e "^[a-zA-Z]"
-#}
-#export -f see_sshd_setting
-#
-#reset_sshd() { 
-#	see_sshd_setting
-#	sudo service sshd stop
-#	sudo service sshd start
-#}
-#export -f reset_sshd
+#callgrind_annotate --inclusive=yes 
+ulimit -c 2000000
 
 
-_rm() { 
-	mv $1 ~/.rubbish/
-}
+#export ala_udp_log="tuser@139.129.58.71"
 
-export -f _rm
+alias sqlto36ad='mysql --defaults-file=~/.db_cfg/main36.cnf -h 1.1.1.1 -D lala  '
